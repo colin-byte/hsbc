@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hsbc-trade-service
+spec:
+  selector:
+    app: hsbc-trade
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hsbc-trade
+spec:
+  serviceName: "hsbc-trade-service"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hsbc-trade
+  template:
+    metadata:
+      labels:
+        app: hsbc-trade
+    spec:
+      containers:
+        - name: hsbc-trade
+          image: 127.0.0.1:5001/hsbc-trade:latest
+          ports:
+            - containerPort: 8080
+              name: http
+          volumeMounts:
+            - name: log-storage
+              mountPath: /var/log/java
+          env:
+            - name: JAVA_OPTS
+              value: "-Djava.awt.headless=true -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+AlwaysPreTouch"
+          # 其他环境变量和配置...
+      imagePullSecrets:
+        - name: registry-secret
+  volumeClaimTemplates:
+    - metadata:
+        name: log-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

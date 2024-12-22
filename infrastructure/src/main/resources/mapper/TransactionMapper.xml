@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hsbc.trade.infrastructure.gateway.impl.mysql.mapper.TransactionMapper">
+
+
+    <sql id="COLUMNS">
+        id
+        ,transaction_id,source_account,dest_account,amount,`timestamp`,is_delete,create_time,update_time
+    </sql>
+
+    <sql id="TABLE_NAME">
+        t_transaction
+    </sql>
+
+    <select id="getTransaction" resultType="java.lang.String">
+        SELECT id,transaction_id,source_account,dest_account,`timestamp`,amount,update_time,create_time FROM
+        <include refid="TABLE_NAME"/>
+        WHERE transaction_id = #{transactionId};
+    </select>
+
+    <insert id="insert" parameterType="com.hsbc.trade.infrastructure.gateway.impl.mysql.dataobject.TransactionDO">
+        INSERT INTO
+        <include refid="TABLE_NAME"/>
+        (
+        transaction_id,
+        source_account,
+        dest_account,
+        amount,
+        `timestamp`,
+        is_delete,
+        create_time,
+        update_time
+        )
+        VALUES
+        (
+        #{transactionId,jdbcType=VARCHAR},
+        #{sourceAccount,jdbcType=VARCHAR},
+        #{destAccount,jdbcType=VARCHAR},
+        #{amount,jdbcType=BIGINT},
+        #{timestamp,jdbcType=BIGINT},
+        0,
+        now(),
+        now()
+        )
+
+    </insert>
+
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hsbc.trade.infrastructure.gateway.impl.mysql.mapper.AccountMapper">
+
+    <resultMap id="BaseMap" type="com.hsbc.trade.infrastructure.gateway.impl.mysql.dataobject.AccountDO">
+        <result column="id" property="id" javaType="java.lang.Long" jdbcType="BIGINT"/>
+        <result column="account_id" property="accountId" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" javaType="java.math.BigDecimal" jdbcType="BIGINT"/>
+        <result column="is_delete" property="isDelete" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="COLUMNS">
+        id
+        ,account_id,amount,is_delete,create_time,update_time
+    </sql>
+
+    <sql id="TABLE_NAME">
+        t_account
+    </sql>
+
+    <select id="getAccount" resultMap="BaseMap">
+        SELECT account_id,amount FROM
+        <include refid="TABLE_NAME"/>
+        WHERE account_id = #{accountId} and is_delete=0;
+    </select>
+
+    <update id="updateBySelective"
+            parameterType="com.hsbc.trade.infrastructure.gateway.impl.mysql.dataobject.AccountDO">
+        UPDATE
+        <include refid="TABLE_NAME"/>
+        SET
+        <if test="amount !=null and amount >0">
+            amount = #{amount},
+        </if>
+
+        update_time = now()
+
+        WHERE is_delete=0
+        <if test="id !=null and id !=0">
+            and id = #{id}
+        </if>
+        <if test="accountId != null and accountId !=''">
+            AND account_id = #{accountId}
+        </if>
+    </update>
+
+    <update id="increaseBalance"
+            parameterType="com.hsbc.trade.infrastructure.gateway.impl.mysql.dataobject.AccountDO">
+        UPDATE
+        <include refid="TABLE_NAME"/>
+        SET
+        <if test="amount !=null and amount >0">
+            amount = amount + #{amount},
+        </if>
+
+        update_time = now()
+
+        WHERE is_delete=0
+        <if test="id !=null and id !=0">
+            and id = #{id}
+        </if>
+        <if test="accountId != null and accountId !=''">
+            AND account_id = #{accountId}
+        </if>
+    </update>
+
+    <update id="decreaseBalance"
+            parameterType="com.hsbc.trade.infrastructure.gateway.impl.mysql.dataobject.AccountDO">
+        UPDATE
+        <include refid="TABLE_NAME"/>
+        SET
+        <if test="amount !=null and amount >0">
+            amount = amount - #{amount},
+        </if>
+
+        update_time = now()
+
+        WHERE is_delete=0
+        <if test="id !=null and id !=0">
+            and id = #{id}
+        </if>
+        <if test="accountId != null and accountId !=''">
+            AND account_id = #{accountId}
+        </if>
+
+        <if test="amount !=null and amount >0">
+            AND amount >= #{amount}
+        </if>
+    </update>
+
+</mapper>

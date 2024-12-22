@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: start
+  profiles:
+    active: dev
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mysql:
+    type-aliases-package: com.hsbc.trade.infrastructure.gateway.impl.dataobject
+    mapper-locations: classpath*:mapper/*.xml
+    config-location: classpath:mybatis-config.xml
+
+server:
+  port: 8081
+
+thread.pool:
+  keep:
+    alive:
+      time: 60
+  allow:
+    core:
+      thread:
+        timeout: true
+  core:
+    size: 80
+  queue:
+    capacity: 200000
+    max:
+      size: 150
+
+account:
+  lock.timeout: 1

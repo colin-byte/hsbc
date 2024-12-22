@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: infrastructure
+  profiles:
+    active: dev
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mysql:
+    type-aliases-package: com.hsbc.trade.infrastructure.gateway.impl.dataobject
+    mapper-locations: classpath*:mapper/*.xml
+    config-location: classpath:mybatis-config.xml
+
+redis.pool:
+  max:
+    total: 128
+    idle: 8
+    wait.millis: 10000
+  min:
+    idle: 2
+  block-when-exhausted: true
+
+server:
+  port: 8081

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="LOG_HOME">./logs</Property>
+        <property name="PATTERN_LAYOUT">%style{%d}{bright,green} [%highlight{%p}] [%style{%t}{bright,blue}] [%c] [%X{skTraceId}] - %msg%n%ex{full}</property>
+    </Properties>
+    <Appenders>
+        <!-- 输出控制台的配置 -->
+        <Console name="Console">
+            <PatternLayout charset="UTF-8" pattern="${PATTERN_LAYOUT}"/>
+        </Console>
+
+        <RollingRandomAccessFile append="true" name="ERROR-APPENDER"
+                                 fileName="${LOG_HOME}/error.log" filePattern="${LOG_HOME}/error.%d{yyyy-MM-dd}.%i.log">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="UTF-8" pattern="${PATTERN_LAYOUT}"/>
+            <Policies>
+                <!-- 隔天重新生成文件 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!-- 100m 生成新文件 -->
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <!-- 每天文件最多生成20个 本地最多保存30天 -->
+            <DefaultRolloverStrategy max="20">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/error.*.log"/>
+                    <IfLastModified age="30d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile append="true" name="TRADE-APPENDER"
+                                 fileName="${LOG_HOME}/trade.log" filePattern="${LOG_HOME}/trade.%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <!-- 只记录info和warn级别信息 -->
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout charset="UTF-8" pattern="${PATTERN_LAYOUT}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/engine.*.log"/>
+                    <IfLastModified age="30d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile append="true" name="SQL-APPENDER"
+                                 fileName="${LOG_HOME}/sql.log" filePattern="${LOG_HOME}/sql.%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout charset="UTF-8" pattern="${PATTERN_LAYOUT}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/sql.*.log"/>
+                    <IfLastModified age="30d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <loggers>
+
+        <AsyncLogger name="trade" level="INFO" additivity="false" includeLocation="true">
+            <appender-ref ref="TRADE-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </AsyncLogger>
+
+        <AsyncLogger name="com.hsbc.trade" level="INFO" additivity="false" includeLocation="true">
+            <appender-ref ref="TRADE-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </AsyncLogger>
+
+        <AsyncLogger name="org.springframework" level="ERROR" additivity="false" includeLocation="true">
+            <appender-ref ref="TRADE-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </AsyncLogger>
+
+
+        <AsyncLogger name="tk.mybatis.mapper" level="WARN" additivity="false" includeLocation="false">
+            <appender-ref ref="TRADE-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </AsyncLogger>
+
+        <AsyncLogger name="com.hsbc.trade.infrastructure.gateway.impl.mysql.mapper" level="DEBUG" additivity="false" includeLocation="false">
+            <appender-ref ref="SQL-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </AsyncLogger>
+
+<!--        <AsyncLogger name="com.hsbc.trade.StartApplication" level="WARN" additivity="true" includeLocation="false">-->
+<!--            <appender-ref ref="TRADE-APPENDER"/>-->
+<!--            <appender-ref ref="ERROR-APPENDER"/>-->
+<!--        </AsyncLogger>-->
+
+        <AsyncRoot level="INFO" includeLocation="true">
+            <appender-ref ref="TRADE-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+            <appender-ref ref="Console"/>
+        </AsyncRoot>
+    </loggers>
+</Configuration>
