@@ -1,4 +1,4 @@
-### 1.使用命令delete pod，k8s自动拉起
+### 1.kubectl delete pod，k8s自动拉起
 ```markdown
 (base) hanzhengting@COLINHAN-MB1 hsbc % kubectl get pods           
 NAME           READY   STATUS    RESTARTS       AGE
@@ -19,4 +19,7 @@ redis-0        1/1     Running   1 (5h8m ago)   23h
 ```
 ![img.png](../png/resilience-1.png)
 
-### 2.
+### 2.kubectl scala扩容
+```markdown
+kubectl scale sts hsbc-trade --replicas=5
+```

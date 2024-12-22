@@ -34,4 +34,3 @@ wrk -c 10 -t 2 -d 10 --script=/Users/hanzhengting/opt/wrk/post.lua http://127.0.
 Requests/sec:    184.70
 Transfer/sec:     62.07KB
 ```
-![压测结果mysql版.png](%E5%8E%8B%E6%B5%8B%E7%BB%93%E6%9E%9Cmysql%E7%89%88.png)

@@ -15,11 +15,14 @@
 
 ```
 
+
 ![架构-1](../png/design-1.png)
 
 #### 方案2：基于Redis LUA、MQ（kafka or pulsar）实现
 
-实际中更倾向于方案2，架构如下：
+
+实际中选择方案2，架构如下：
+
 ![架构-2](../png/design-2.png)
 
 ```markdown
@@ -41,7 +44,7 @@ b) 在每一笔转账操作时，当缓存中没有账户数据时，会从db中
 转账成功后会发送交易明细MQ消息，有单独的consumer服务将数据同步到db，在提升转账业务的高并发性的同时，使用MQ来保障转账事务的最终一致性。
 ```
 
-### 工程实现
+### 2.工程实现
 
 ```markdown
 项目采用ddd架构，共分为adapter、client、app、domain、infrastructure层，adapter是适配层，主要提供restful api接口、定时任务、或者消费MQ消息的逻辑。
