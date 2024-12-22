@@ -11,6 +11,32 @@ spec:
       targetPort: 8080
   type: LoadBalancer
 
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hsbc-trade-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: hsbc-trade
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 30
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 20
 
 ---
 
@@ -20,7 +46,7 @@ metadata:
   name: hsbc-trade
 spec:
   serviceName: "hsbc-trade-service"
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: hsbc-trade
@@ -32,6 +58,27 @@ spec:
       containers:
         - name: hsbc-trade
           image: 127.0.0.1:5001/hsbc-trade:latest
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "2"
+            limits:
+              memory: "256Mi"
+              cpu: "2"
           ports:
             - containerPort: 8080
               name: http

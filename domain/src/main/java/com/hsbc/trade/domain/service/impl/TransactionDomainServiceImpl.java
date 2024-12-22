@@ -116,6 +116,8 @@ public class TransactionDomainServiceImpl implements TransactionDomainService {
                     throw new AwaitToRetryException(ErrorCode.AWAIT_TO_RETRY);
                 }
                 sourceBalance = pair.getRight();
+            } else {
+                sourceBalance = new BigDecimal(sourceBalanceStr);
             }
             if (sourceBalance == null || sourceBalance.compareTo(entity.getAmount()) < 0) {
                 throw new ParamValidException(ErrorCode.PARAMETER_VALUE_INVALID);

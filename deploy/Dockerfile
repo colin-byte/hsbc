@@ -5,7 +5,7 @@ ARG MODULE=start
 
 COPY start.jar /data/trade/start.jar
 
-COPY start.sh /data/trade/start.sh
+COPY launch.sh /data/trade/launch.sh
 
 ENV LANG zh_CN.UTF-8
 ENV LANGUAGE zh_CN.UTF-8

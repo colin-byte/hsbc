@@ -20,11 +20,12 @@ docker login -u colinhan -p colinhan 127.0.0.1:5001
 
 ### 镜像打包/上传个人仓库
 ```shell
+mvn clean package -DskipTests
 cd deploy
 rm -rf start.jar
 cp ../start/target/start.jar ./
-docker images 127.0.0.1:5001/hsbc-trade #查看镜像
-docker rmi 127.0.0.1:5001/hsbc-trade # 删除镜像
+docker images 127.0.0.1:5001/hsbc-trade
+docker rmi 127.0.0.1:5001/hsbc-trade
 docker build -t hsbc-trade .
 docker tag hsbc-trade 127.0.0.1:5001/hsbc-trade
 docker push 127.0.0.1:5001/hsbc-trade
@@ -32,14 +33,9 @@ docker push 127.0.0.1:5001/hsbc-trade
 
 ### 服务部署
 ```shell
-# 工程打jar包
-mvn clean package -DskipTests
-
-
 kubectl apply -f redis-sts.yaml
 kubectl apply -f mysql-sts.yaml
 kubectl apply -f trade-sts.yaml
-
 ```
 
 ###  Postman测试

@@ -8,7 +8,7 @@ if [ "" != "$res" ]; then
   echo "killed progress:$res"
 fi
 
-APP_ENV=dev
+APP_ENV=test
 
 JAR_FILE_NAME=$MODULE.jar
 
