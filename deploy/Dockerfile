@@ -22,4 +22,4 @@ WORKDIR /data/trade
 
 EXPOSE 8080
 
-CMD ["/bin/bash","-c","source ~/.bashrc && sh /data/trade/start.sh"]
+CMD ["/bin/bash","-c","source ~/.bashrc && sh /data/trade/launch.sh"]

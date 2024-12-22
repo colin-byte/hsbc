@@ -15,12 +15,12 @@
 
 ```
 
-![img.png](img.png)
+![架构-1](../png/design-1.png)
 
 #### 方案2：基于Redis LUA、MQ（kafka or pulsar）实现
 
 实际中更倾向于方案2，架构如下：
-![img_2.png](img_2.png)
+![架构-2](../png/design-2.png)
 
 ```markdown
 代码见：com.hsbc.trade.domain.service.impl.TransactionDomainServiceImpl.process

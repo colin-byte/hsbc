@@ -41,7 +41,7 @@ kubectl apply -f mysql-sts.yaml
 kubectl apply -f trade-sts.yaml
 
 ```
-![img_6.png](img_6.png)
+![deploy.png](doc/png/deploy.png)
 
 ###  Postman测试
 ```
@@ -73,8 +73,8 @@ http://127.0.0.1:8080/transaction/process POST
 }
 ```
 ### 表数据
-![img_3.png](img_3.png)
-![img_4.png](img_4.png)
+![t1.png](doc/png/t1.png)
+![t2.png](doc/png/t2.png)
 
 
 ### 失败重试
