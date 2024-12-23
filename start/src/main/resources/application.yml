@@ -13,9 +13,6 @@ mybatis:
     mapper-locations: classpath*:mapper/*.xml
     config-location: classpath:mybatis-config.xml
 
-server:
-  port: 8080
-
 thread.pool:
   keep:
     alive:

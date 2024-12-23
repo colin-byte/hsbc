@@ -38,6 +38,11 @@ kubectl apply -f mysql-sts.yaml
 kubectl apply -f trade-sts.yaml
 ```
 
+### 服务启动类
+```markdown
+com.hsbc.trade.StartApplication
+```
+
 ###  Postman测试
 ```
 # 探活
