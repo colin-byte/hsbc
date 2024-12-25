@@ -51,12 +51,12 @@ curl '127.0.0.1:8080/health'
 health
 
 # 接口调用
-http://127.0.0.1:8080/transaction/process POST
-{
-    "SourceAccount":"3da6111a917b4aa09a0cce02e133c85a",
+curl  -X POST '127.0.0.1:8080/transaction/process' -H 'Content-Type: application/json' -d '{
+     "SourceAccount":"3da6111a917b4aa09a0cce02e133c85a",
     "DestAccount":"c684fa083ca14fe8ad8332b1f1d7c4aa",
-    "Amount":2
-}
+    "Amount":1
+}'
+
 # 返回
 {
     "success": true,
